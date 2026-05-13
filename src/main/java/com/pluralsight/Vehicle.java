@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import java.time.LocalDate;
+
 public class Vehicle extends Asset{
     private String makeModel;
     private int year;
@@ -34,5 +36,27 @@ public class Vehicle extends Asset{
 
     public void setOdometer(double odometer) {
         this.odometer = odometer;
+    }
+
+    @Override
+    public double getValue() {
+        int currentYear = LocalDate.now().getYear();
+        int age = currentYear - year;
+
+        double price = getOriginalCost();
+
+        if (age >= 0 && age <= 3) {
+            price = price - (price * 0.03 * age);
+        } else if (age >= 4 && age <= 6) {
+            price = price - (price * 0.06 * age);
+        } else if (age >= 7 && age <= 10) {
+            price = price - (price * 0.08 * age);
+        } else if (age > 10) {
+            price = 1000;
+        }
+        if (odometer > 100000 && !makeModel.toLowerCase().contains("honda") && !makeModel.toLowerCase().contains("toyota")) {
+            price = price - (price * .25);
+        }
+        return price;
     }
 }
